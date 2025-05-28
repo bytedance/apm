@@ -1,0 +1,125 @@
+defaults:
+ - base
+ - _self_
+
+data:
+  task: hallucination
+
+  dataset: pdb
+
+  sampler:
+    # Setting for 40GB GPUs
+    # max_batch_size: 64
+    # max_num_res_squared: 400_000
+
+    # Setting for 80GB GPUs
+    max_batch_size: 64
+    max_num_res_squared: 400_000
+
+model:
+  multimer_crop_size: ${pdb_dataset.multimer_crop_size}
+  multimer_crop_threshold: ${pdb_dataset.multimer_crop_threshold}
+  aatype_pred: True
+  aatype_pred_num_tokens: 21
+  transformer_dropout: 0.2
+  use_plm_attn_map: False
+  highlight_interface: False
+  node_features:
+    use_mlp: True
+    embed_aatype: True
+    embed_chain_in_node_feats: True
+  torsions_pred: True
+  torsions_pred_type: sincos # angle or sincos
+  backbone_model:
+    num_blocks: 8
+  sidechain_model:
+    num_blocks: 6
+    num_torsion_blocks: 4
+  refine_model:
+    num_blocks: 8
+  
+packing_model:
+  train_packing_only: ${experiment.train_packing_only}
+  torsions_pred: True
+  torsions_pred_type: sincos # angle or sincos
+  sidechain_model:
+    num_blocks: 6
+    num_torsion_blocks: 4
+
+interpolant:
+  codesign_separate_t: True
+  codesign_forward_fold_prop: 0.0
+  codesign_inverse_fold_prop: 0.0
+  codesign_packing_prop: 1.0
+  codesign_prop: -1.0 # -1.0 means the remaining prob is used for codesign, otherwise the codesign_prop will be normed with other task_probs
+  codesign_partial_prop: 0.0
+  codesign_partial_ratio: -1
+  conditional_multimer_prop: 0.5
+  conditional_multimer_ratio: 0.5
+  aatypes:
+    corrupt: True
+    temp: 0.1
+    do_purity: True
+    noise: 20.0
+    interpolant_type: masking
+  torsions:
+    corrupt: True
+  rots:
+    batch_ot: False
+  sidechain_start_t: 0.8
+  refine_start_t: 0.8
+  self_condition: 1.0
+  sampling:
+    num_timesteps: 500
+  
+pdb_dataset:
+  conditional_multimer_prop: ${interpolant.conditional_multimer_prop}
+  conditional_multimer_ratio: ${interpolant.conditional_multimer_ratio}
+  train_packing_only: ${experiment.train_packing_only}
+
+experiment:
+  train_packing_only: True
+  consistency_loss_weight: 0.0
+  # if set consistency_loss_weight as 0.0, no consistency loss is used
+  # if set consistency_loss_weight greater than 0.0, consistency loss is used, and the batch consists of two same half-batches with different t
+  design_level: sidechain # backbone -> sidechain -> refine
+  # joint_training: True # if False, only the model corresponding to design_level is trained, otherwise all models before are also being trained
+  rollout_start_epoch: 10000
+  rollout_num: 5
+  highlight_interface: False
+  debug: False
+  replica_batch: False
+  raw_state_dict_reload: null
+  training:
+    backbone_aux_loss_weight: 0.0
+    aatypes_loss_weight: 1.0
+    torsions_loss_weight: 0.5
+    refine_fape_loss_weight: 0.5
+    refine_aux_loss_weight: 0.5
+    use_torsion_norm_scale: False
+    model_training_steps: sidechain_1
+  rot_training_style: multiflow # foldflow or multiflow
+  rot_inference_style: multiflow # foldflow or multiflow
+  num_devices: 8
+  device_memory: 55
+  warm_start: null
+  wandb:
+    name: APM_pretraining_sidechain
+    project: APM
+  trainer:
+    check_val_every_n_epoch: null
+    val_check_interval: 99999999
+    accumulate_grad_batches: 1
+    gradient_clip_val: 5.0
+    gradient_clip_algorithm: "norm"
+    num_sanity_val_steps: 0
+    num_nodes: 1
+    max_epochs: 200
+  checkpointer:
+    save_top_k: -1
+    every_n_epochs: null
+    every_n_train_steps: 100
+    save_on_train_epoch_end: True
+    monitor: null
+    filename: 'e{epoch:04d}_s{step}'
+    auto_insert_metric_name: False

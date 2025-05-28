@@ -1,0 +1,27 @@
+inference:
+  folding:
+    pt_hub_dir: pt_hub_dir
+  ckpt_path: null
+  interpolant:
+    codesign_forward_fold_prop: 0.1
+    codesign_inverse_fold_prop: 0.1
+    codesign_packing_prop: 0.1
+    codesign_prop: -1.0 # -1.0 means the remaining prob is used for codesign, otherwise the codesign_prop will be normed with other task_probs
+    codesign_partial_prop: 0.0
+    codesign_partial_ratio: -1
+    sidechain_start_t: 0.8
+    refine_start_t: 0.8
+    rots:
+      eps: 1e-4
+
+    trans:
+      eps: 1e-4
+
+    aatypes:
+      eps: 1e-4
+      max_temp: 30.0
+      decay_rate: 30.0
+      freq_penalty_ratio: 0.15
+      apply_penalty: True
+      penalty_factor: 3.0
+      penalty_mode: both # exceed_only or both

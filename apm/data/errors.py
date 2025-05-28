@@ -1,0 +1,55 @@
+"""
+----------------
+MIT License
+
+Copyright (c) 2024 Andrew Campbell, Jason Yim
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+----------------
+This file may have been modified by Bytedance Ltd. and/or its affiliates (“Bytedance's Modifications”). 
+All Bytedance's Modifications are Copyright (2025) Bytedance Ltd. and/or its affiliates. 
+"""
+
+
+"""Error class for handled errors."""
+
+
+class DataError(Exception):
+    """Data exception."""
+    pass
+
+
+class FileExistsError(DataError):
+    """Raised when file already exists."""
+    pass
+
+
+class MmcifParsingError(DataError):
+    """Raised when mmcif parsing fails."""
+    pass
+
+
+class ResolutionError(DataError):
+    """Raised when resolution isn't acceptable."""
+    pass
+
+
+class LengthError(DataError):
+    """Raised when length isn't acceptable."""
+    pass

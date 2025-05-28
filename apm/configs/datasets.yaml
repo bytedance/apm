@@ -1,0 +1,95 @@
+# TODO: Can I make the datasets inherit these settings?
+shared:
+  seed: 123
+  max_cache_size: 100_000
+  samples_per_eval_length: 5
+  num_eval_lengths : 8
+  max_eval_length: 256
+  max_memory: 1760 # GB
+
+
+
+pdb_dataset:
+  seed: ${shared.seed}
+  csv_path: metadata_all/pdb_metadata.csv
+  cluster_path: metadata_all/pdb.clusters
+  test_set_pdb_ids_path: null
+  max_cache_size: ${shared.max_cache_size}
+  cache_num_res: 0
+  inpainting_percent: 1.0
+  multimer_crop_size: 384
+  multimer_crop_threshold: 384
+  multimer_length_threshold: 2048
+
+  max_memory: ${shared.max_memory}
+
+  add_plddt_mask: False
+  max_eval_length: ${shared.max_eval_length}
+  redesigned_csv_path: metadata_all/pdb_redesigned.csv
+  use_redesigned: False
+
+  synthetic_csv_path: metadata_all/distillation_metadata.csv
+  synthetic_cluster_path: metadata_all/distillation.clusters
+  use_synthetic: False
+
+  use_multimer: True
+  use_multimer_only: False
+  use_unclustered_multimer: False
+
+  AFDB_csv_path: metadata_all/metadata_90.csv
+  AFDB_cluster_path: metadata_all/AFDB.clusters
+  use_AFDB: True
+  use_SWISSPROT: True
+
+  # Eval parameters
+  samples_per_eval_length: ${shared.samples_per_eval_length}
+  num_eval_lengths: ${shared.num_eval_lengths}
+
+  # Filtering
+  filter:
+    max_num_res: 384
+    min_num_res: 60
+    max_coil_percent: 0.5
+    rog_quantile: 0.96
+    oligomeric: ['monomeric']
+    num_chains: [1]
+    quaternary_category: ['heteromer']
+    AFDB_plddt_threshold: 95.0
+    
+
+pdb_post2021_dataset:
+  seed: ${shared.seed}
+  csv_path: metadata_all/test_set_metadata.csv
+  cluster_path: metadata_all/test_set_clusters.csv
+  test_set_pdb_ids_path: metadata_all/test_set_pdb_ids.csv
+  max_cache_size: ${shared.max_cache_size}
+  cache_num_res: 0
+  add_plddt_mask: False
+  max_eval_length: ${shared.max_eval_length}
+  redesigned_csv_path: null
+  use_redesigned: False
+
+  use_multimer: False
+  use_unclustered_multimer: False
+  multimer_length_threshold: 512
+  use_multimer_only: False
+
+  max_memory: ${shared.max_memory}
+  
+  synthetic_csv_path: null
+  synthetic_cluster_path: null
+  use_synthetic: False
+
+  # Eval parameters
+  samples_per_eval_length: ${shared.samples_per_eval_length}
+  num_eval_lengths: ${shared.num_eval_lengths}
+
+  # Filtering
+  filter:
+    max_num_res: 400
+    min_num_res: 50
+    max_coil_percent: 0.5
+    rog_quantile: 0.96
+    oligomeric: ['monomeric']
+    num_chains: [1]
+    quaternary_category: ['heteromer']

@@ -1,0 +1,80 @@
+defaults:
+  - base
+  - inference_base
+  - _self_
+
+experiment:
+  design_level: refine
+
+inference:
+
+  predict_dir: ./APM/eval/conditional
+  inference_subdir: ${now:%Y-%m-%d}_${now:%H-%M-%S}
+  task: conditional
+  seed: 2025
+  use_gpu: True 
+  batch_size: 1 
+  sample_num: 8 
+  conditional_ckpt_path: null
+
+
+  # Directory of software, weights, and outputs.  
+  pmpnn_dir: ./ProteinMPNN
+
+  folding:
+    folding_model: esmf
+    own_device: False
+    pmpnn_path: ./ProteinMPNN/
+    pt_hub_dir: pt_hub_dir
+    PLM_dir: offical_ckpts
+
+  interpolant:
+    min_t: 1e-2
+    provide_kappa: False
+    codesign_separate_t: False
+
+    rots:
+      corrupt: True
+      sample_schedule: exp
+      exp_rate: 10
+
+    trans:
+      corrupt: True
+      pre_align: True
+      train_schedule: linear
+      sample_schedule: linear
+      sample_temp: 1.0
+      potential: null
+      potential_t_scaling: False
+      rog:
+        weight: 20.0
+        cutoff: 5.0
+    
+    aatypes:
+      corrupt: True
+      schedule: linear
+      schedule_exp_rate: -3
+      temp: 0.1
+      noise: 20.0
+      do_purity: True
+      interpolant_type: masking
+
+    torsions:
+      corrupt: True
+
+    sampling:
+      num_timesteps: 500
+      do_sde: False
+
+    self_condition: True
+
+conditional_dataset:
+  pdb_path: null
+  sample_num: 8
+  sample_length: null
+  chain_design: A
+  random_coefficient: 3.0
+  random_alpha: 2.0
+  random_beta: 2.0
+  direction_condition: 1.0
+  direction_surface: 0.0
