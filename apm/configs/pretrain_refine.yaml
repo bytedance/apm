@@ -50,7 +50,7 @@ interpolant:
   codesign_separate_t: True
   codesign_forward_fold_prop: 0.25
   codesign_inverse_fold_prop: 0.25
-  codesign_packing_prop: 0.1
+  codesign_packing_prop: 0.5 # packing task only occurs in sidechain model training
   codesign_prop: -1.0 # -1.0 means the remaining prob is used for codesign, otherwise the codesign_prop will be normed with other task_probs
   codesign_partial_prop: 0.0
   codesign_partial_ratio: -1
